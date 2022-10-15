@@ -1,0 +1,85 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/OAI/OpenAPI-Specification/main/schemas/v3.1/schema.json
+openapi: "3.1.0"
+info:
+  title: Bookings
+  version: 0.1.0
+paths:
+  /:
+    get:
+      summary: Hello World
+      operationId: serveRoot
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/messageResponse"
+      deprecated: false
+  /api/students:
+    get:
+      summary: Returns all students
+      operationId: serveStudents
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/student"
+  /api/students/{id}:
+    get:
+      summary: Returns a student by ID
+      operationId: serveStudentById
+      parameters:
+        - name: id
+          in: path
+          description: ID of student to fetch
+          schema:
+            $ref: "#/components/schemas/studentId"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/student"
+
+components:
+  schemas:
+    studentId:
+      type: integer
+      format: int64
+      description: Student Unique identifier
+    studentEmailAddress:
+      type: string
+      maxLength: 256
+      description: Student email
+    messageResponse:
+      type: object
+      required:
+        - message
+      properties:
+        error:
+          type: string
+          description: An error message block
+        message:
+          type: string
+          description: A descriptive message
+    student:
+      type: object
+      required:
+        - id
+        - name
+        - email
+      properties:
+        id:
+          $ref: "#/components/schemas/studentId"
+        name:
+          type: string
+          maxLength: 256
+          description: Name of student
+        email:
+          $ref: "#/components/schemas/studentEmailAddress"
